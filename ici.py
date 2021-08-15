@@ -1,50 +1,139 @@
 from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk, Image
-import os
-import sys
+from scipy.spatial import KDTree
+from webcolors import (
+    css3_hex_to_names,
+    hex_to_rgb,
+)
 def load_image():
+    def results_hex():
+        img = (Image.open(image_dir)).resize((10,10), Image.ANTIALIAS)
+        img.convert('RGB')
+        width, height = img.size
+        colors = []
+        for x in range(0, width):
+            for y in range(0, height):
+                r, g, b = img.getpixel((x,y))
+                colors.append(img.getpixel((x,y)))
+        resultsHEX_window = Tk()
+        resultsHEX_window.resizable(True, True)
+        resultsHEX_window.geometry("250x450")
+        resultsHEX_window.title("HEX RESULTS")
+        listbox = Listbox(resultsHEX_window, width=35)
+        listbox.pack(side = LEFT, fill = BOTH)
+        scrollbar = Scrollbar(resultsHEX_window)
+        scrollbar.pack(side = RIGHT, fill = BOTH)
+        result_rgb = []
+        for values in colors:
+            if values not in result_rgb:
+                result_rgb.append(values)
+        result_hex =[]
+        for items in result_rgb:
+            result_hex.append("#" + str('%02x%02x%02x' % items))
+        for items in result_hex:
+            listbox.insert(END, items)
+        count = 0
+        for items in result_hex:
+            listbox.itemconfig(count, {'bg':(str(result_hex[count]))})
+            count = count + 1
+        listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = listbox.yview)
+        resultsHEX_window.mainloop()
+    def results_rgb():
+        img = (Image.open(image_dir)).resize((10,10), Image.ANTIALIAS)
+        img.convert('RGB')
+        width, height = img.size
+        colors = []
+        for x in range(0, width):
+            for y in range(0, height):
+                r, g, b = img.getpixel((x,y))
+                colors.append(img.getpixel((x,y)))
+        resultsHEX_window = Tk()
+        resultsHEX_window.resizable(True, True)
+        resultsHEX_window.geometry("250x450")
+        resultsHEX_window.title("RGB RESULTS")
+        listbox = Listbox(resultsHEX_window, width=35)
+        listbox.pack(side = LEFT, fill = BOTH)
+        scrollbar = Scrollbar(resultsHEX_window)
+        scrollbar.pack(side = RIGHT, fill = BOTH)
+        result_rgb = []
+        for values in colors:
+            if values not in result_rgb:
+                result_rgb.append(values)
+        result_hex =[]
+        for items in result_rgb:
+            result_hex.append("#" + str('%02x%02x%02x' % items))
+        for items in result_rgb:
+            listbox.insert(END, items)
+        count = 0
+        for items in result_hex:
+            listbox.itemconfig(count, {'bg':(str(result_hex[count]))})
+            count = count + 1
+        listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = listbox.yview)
+        resultsHEX_window.mainloop()
+    def results_webcolors():
+        img = (Image.open(image_dir)).resize((10,10), Image.ANTIALIAS)
+        img.convert('RGB')
+        width, height = img.size
+        colors = []
+        for x in range(0, width):
+            for y in range(0, height):
+                r, g, b = img.getpixel((x,y))
+                colors.append(img.getpixel((x,y)))
+        resultsHEX_window = Tk()
+        resultsHEX_window.resizable(True, True)
+        resultsHEX_window.geometry("250x450")
+        resultsHEX_window.title("WEB COLORS CSS3 RESULTS")
+        listbox = Listbox(resultsHEX_window, width=35)
+        listbox.pack(side = LEFT, fill = BOTH)
+        scrollbar = Scrollbar(resultsHEX_window)
+        scrollbar.pack(side = RIGHT, fill = BOTH)
+        def convert_rgb_to_names(rgb_tuple):
+            css3_db = css3_hex_to_names
+            names = []
+            rgb_values = []
+            for color_hex, color_name in css3_db.items():
+                names.append(color_name)
+                rgb_values.append(hex_to_rgb(color_hex))
+            
+            kdt_db = KDTree(rgb_values)
+            distance, index = kdt_db.query(rgb_tuple)
+            return f'Closest match: {names[index]}'
+        result_rgb = []
+        for values in colors:
+            if values not in result_rgb:
+                result_rgb.append(values)
+        result_hex =[]
+        for items in result_rgb:
+            result_hex.append("#" + str('%02x%02x%02x' % items))
+        results_webcolorlist = []
+        for items in result_rgb:
+            results_webcolorlist.append(convert_rgb_to_names((items)))
+        for items in results_webcolorlist:
+            listbox.insert(END, items)
+        count = 0
+        for items in result_hex:
+            listbox.itemconfig(count, {'bg':(str(result_hex[count]))})
+            count = count + 1
+        listbox.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = listbox.yview)
+        resultsHEX_window.mainloop()
     image_dir = filedialog.askopenfilename()
     img= (Image.open(image_dir))
-    resized_image= img.resize((400,600), Image.ANTIALIAS)
+    resized_image= img.resize((300,400), Image.ANTIALIAS)
     img_forshow = ImageTk.PhotoImage(resized_image)
-    print(image_dir)
     panel = Label(aci_window, image = img_forshow)
     panel.image = img_forshow
     panel.pack(pady=30 , fill = "none", expand = "no")
     image_button.configure(text = "Exit", command = exit)
-    img = (Image.open(image_dir)).resize((10,10), Image.ANTIALIAS)
-    img.convert('RGB')
-    width, height = img.size
-    colors = []
-    for x in range(0, width):
-        for y in range(0, height):
-            r, g, b = img.getpixel((x,y))
-            colors.append(img.getpixel((x,y)))
-    results_window = Tk()
-    results_window.resizable(True, True)
-    results_window.geometry("250x450")
-    results_window.title("RESULTS")
-    listbox = Listbox(results_window)
-    listbox.pack(side = LEFT, fill = BOTH)
-    scrollbar = Scrollbar(results_window)
-    scrollbar.pack(side = RIGHT, fill = BOTH)
-    result_rgb = []
-    for values in colors:
-        if values not in result_rgb:
-            result_rgb.append(values)
-    result_hex =[]
-    for items in result_rgb:
-        result_hex.append("#" + str('%02x%02x%02x' % items))
-    for items in result_hex:
-        listbox.insert(END, items)
-    count = 0
-    for items in result_hex:
-        listbox.itemconfig(count, {'bg':(str(result_hex[count]))})
-        count = count + 1
-    listbox.config(yscrollcommand = scrollbar.set)
-    scrollbar.config(command = listbox.yview)
-    results_window.mainloop()
+    hex_button = Button(aci_window, width=25, height=2, bg = "white", fg = "black", text="HEX Results", font="Arial 14", command = results_hex)
+    hex_button.pack(pady=15)
+    rgb_button = Button(aci_window, width=25, height=2, bg = "white", fg = "black", text="RGB Results", font="Arial 14", command = results_rgb)
+    rgb_button.pack(pady=15)
+    webcolors_button = Button(aci_window, width=25, height=2, bg = "white", fg = "black", text="WEB COLORS CSS3 Results", font="Arial 14", command = results_webcolors)
+    webcolors_button.pack(pady=15)
 aci_window = Tk()
 aci_window.resizable(True, True)
 aci_window.geometry("500x900")
