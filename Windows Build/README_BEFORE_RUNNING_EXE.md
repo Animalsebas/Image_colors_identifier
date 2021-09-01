@@ -1,0 +1,1 @@
+This .exe is not signed, your antivirus is going to detect it as a virus, this .exe is completly safe, you will need to add an exception in your antivirus provider with the .exe directory, by that the file will not be deleted and you will be able to run the executable perfectly.
