@@ -2,8 +2,7 @@
 Program to identify all the colors in an image. Results in HEX, RGB and CSS (closest match)
 
 # USAGE
-Main window:
-/n
+Main window:                                                                                                                                                                       
 ![1](https://user-images.githubusercontent.com/72776507/144542291-b92c64de-8b6a-4d87-8b06-373b45446549.jpg)
 
 Parameters (more pixels = more acurrate color detection, but slower and with more results):
