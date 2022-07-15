@@ -1,5 +1,5 @@
 # Image_colors_identifier
-Program to identify all the colors in an image. Results in HEX, RGB and CSS (closest match)
+Python program to identify all the colors in an image. Results in HEX, RGB and CSS (closest match)
 
 # USAGE
 Main window:                                                                                                                                                                       
